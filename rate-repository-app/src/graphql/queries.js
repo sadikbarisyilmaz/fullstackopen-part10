@@ -22,5 +22,3 @@ export const GET_REPOSITORIES = gql`
       }
   }
 `;
-
-// other queries...
