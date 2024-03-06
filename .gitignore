@@ -1,0 +1,5 @@
+rate-repository-api/.env
+rate-repository-api/node_modules
+rate-repository-api/.DS_Store
+rate-repository-api/database.sqlite
+rate-repository-api/.env.template
