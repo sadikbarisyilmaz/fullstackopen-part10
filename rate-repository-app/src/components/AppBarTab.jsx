@@ -5,16 +5,15 @@ const styles = StyleSheet.create({
   header: {
     marginVertical: 20,
     color: "#FFFFFF",
+    paddingHorizontal: 10,
   },
 });
 
 const AppBarTab = ({ children }) => {
   return (
-    <Pressable>
-      <Text fontSize="subheading" fontWeight="bold" style={styles.header}>
-        {children}
-      </Text>
-    </Pressable>
+    <Text fontSize="subheading" fontWeight="bold" style={styles.header}>
+      {children}
+    </Text>
   );
 };
 
