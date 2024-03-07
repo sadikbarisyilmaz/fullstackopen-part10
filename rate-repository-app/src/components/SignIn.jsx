@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import Text from "./Text";
 import theme from "../theme";
+import useSignIn from "../hooks/useSignIn";
+import { AuthStorage } from "../utils/authStorage";
 
 const styles = StyleSheet.create({
   container: {
@@ -43,13 +45,25 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const [signIn] = useSignIn();
+  // console.log(AuthStorage);
   const initialValues = {
     username: "",
     password: "",
   };
 
-  const handleSubmit = (values) => {
-    console.log(values);
+  const handleSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      const AccessTokenStorage = new AuthStorage("AccessToken");
+      await AccessTokenStorage.setAccessToken(data.authenticate.accessToken);
+
+      console.log("get: ", await AccessTokenStorage.getAccessToken());
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const Form = ({ onSubmit }) => {
@@ -70,7 +84,7 @@ const SignIn = () => {
                 : theme.colors.textSecondary,
             },
           ]}
-          placeholder="Username"
+          placeholder="Username: matti"
           value={formik.values.username}
           onChangeText={formik.handleChange("username")}
         />
@@ -88,7 +102,7 @@ const SignIn = () => {
                 : theme.colors.textSecondary,
             },
           ]}
-          placeholder="Password"
+          placeholder="Password: password"
           secureTextEntry
           value={formik.values.password}
           onChangeText={formik.handleChange("password")}
