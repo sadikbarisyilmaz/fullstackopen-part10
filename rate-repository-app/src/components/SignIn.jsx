@@ -1,10 +1,12 @@
 import { TextInput, Pressable, View, StyleSheet } from "react-native";
 import { useFormik } from "formik";
+import { AuthStorage } from "../utils/authStorage";
+import { useNavigate } from "react-router-native";
 import * as yup from "yup";
 import Text from "./Text";
 import theme from "../theme";
 import useSignIn from "../hooks/useSignIn";
-import { AuthStorage } from "../utils/authStorage";
+import useAuthStorage from "../hooks/useAuthStorage";
 
 const styles = StyleSheet.create({
   container: {
@@ -46,21 +48,20 @@ const validationSchema = yup.object().shape({
 
 const SignIn = () => {
   const [signIn] = useSignIn();
-  // console.log(AuthStorage);
   const initialValues = {
     username: "",
     password: "",
   };
-
+  const navigate = useNavigate("/");
+  const authStorage = useAuthStorage();
   const handleSubmit = async (values) => {
     const { username, password } = values;
 
     try {
       const { data } = await signIn({ username, password });
-      const AccessTokenStorage = new AuthStorage("AccessToken");
-      await AccessTokenStorage.setAccessToken(data.authenticate.accessToken);
+      // console.log("get: ", await authStorage.getAccessToken());
 
-      console.log("get: ", await AccessTokenStorage.getAccessToken());
+      navigate("/");
     } catch (e) {
       console.log(e);
     }
