@@ -9,7 +9,11 @@ const RepositoryList = () => {
   });
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Text style={{ alignSelf: "center", paddingVertical: 100 }}>
+        Loading...
+      </Text>
+    );
   }
 
   return <RepositoryListContainer repositories={data.repositories} />;

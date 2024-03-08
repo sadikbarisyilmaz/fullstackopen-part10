@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, Pressable } from "react-native";
+import { View, StyleSheet, Image, Pressable, FlatList } from "react-native";
 import Text from "./Text";
 import Badge from "./card/Badge";
 import theme from "../theme";
@@ -7,6 +7,8 @@ import { GET_REPOSITORY } from "../graphql/queries";
 import { nFormatter } from "../helpers";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-native";
+import ReviewCard from "./card/ReviewCard";
+import { RepositoryInfo } from "./card/RepositoryInfo";
 
 const styles = StyleSheet.create({
   container: {
@@ -38,22 +40,23 @@ const styles = StyleSheet.create({
       justifyContent: "center",
     },
   },
-
   linkButton: {
     backgroundColor: theme.colors.primary,
     borderRadius: 3,
     content: {
-      paddingVertical: 6,
+      paddingVertical: 8,
       color: "white",
       alignSelf: "center",
+      fontWeight: "bold",
     },
+  },
+  separator: {
+    height: 10,
   },
 });
 
 const SinlgeRepoView = () => {
   let { id } = useParams();
-  console.log(id);
-
   const { data, error, loading } = useQuery(GET_REPOSITORY, {
     variables: { repositoryId: id },
   });
@@ -61,85 +64,23 @@ const SinlgeRepoView = () => {
   if (loading) {
     return <Text>loading...</Text>;
   }
+  const ItemSeparator = () => <View style={styles.separator} />;
 
-  console.log(data.repository.language);
+  const reviewNodes = data.repository.reviews
+    ? data.repository.reviews.edges.map((edge) => edge.node)
+    : [];
+
   return (
-    <View testID="repositoryItem" style={styles.container}>
-      <View style={styles.info}>
-        <Image
-          style={styles.info.image}
-          source={{
-            uri: `${data.repository.ownerAvatarUrl}`,
-          }}
-        />
-        <View style={styles.info.description}>
-          <Text fontSize="subheading" fontWeight="bold">
-            {data.repository.fullName}
-          </Text>
-          <Text color="textSecondary" fontSize="subheading">
-            {data.repository.description}
-          </Text>
-
-          <Badge>{data.repository.language}</Badge>
-        </View>
-      </View>
-      <View style={styles.stats}>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {nFormatter(data.repository.stargazersCount)}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Stars
-          </Text>
-        </View>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {nFormatter(data.repository.forksCount)}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Forks
-          </Text>
-        </View>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {nFormatter(data.repository.reviewCount)}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Reviews
-          </Text>
-        </View>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {data.repository.ratingAverage}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Rating
-          </Text>
-        </View>
-      </View>
-      <Pressable
-        onPress={() => Linking.openURL(data.repository.url)}
-        style={styles.linkButton}
-      >
-        <Text style={styles.linkButton.content}>Open In Github</Text>
-      </Pressable>
-    </View>
+    <>
+      <FlatList
+        data={reviewNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item, index }) => <ReviewCard item={item} key={index} />}
+        ListHeaderComponent={() => (
+          <RepositoryInfo repository={data.repository} />
+        )}
+      />
+    </>
   );
 };
 

@@ -23,7 +23,6 @@ const Main = () => {
           <Route path="/signIn" element={<SignIn />} />
           <Route path=":id" element={<SinlgeRepoView />} />
         </Routes>
-        {/* <RepositoryList /> */}
       </View>
     </>
   );
