@@ -1,7 +1,8 @@
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Pressable } from "react-native";
 import { nFormatter } from "../../helpers";
 import Text from "../Text";
 import Badge from "./Badge";
+import { Link } from "react-router-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -37,75 +38,79 @@ const styles = StyleSheet.create({
 
 const RepoCard = ({ item }) => {
   return (
-    <View testID="repositoryItem" style={styles.container}>
-      <View style={styles.info}>
-        <Image
-          style={styles.info.image}
-          source={{
-            uri: `${item.ownerAvatarUrl}`,
-          }}
-        />
-        <View style={styles.info.description}>
-          <Text fontSize="subheading" fontWeight="bold">
-            {item.fullName}
-          </Text>
-          <Text color="textSecondary" fontSize="subheading">
-            {item.description}
-          </Text>
-          <Badge>{item.language}</Badge>
+    <Pressable>
+      <Link to={`/${item.id}`}>
+        <View testID="repositoryItem" style={styles.container}>
+          <View style={styles.info}>
+            <Image
+              style={styles.info.image}
+              source={{
+                uri: `${item.ownerAvatarUrl}`,
+              }}
+            />
+            <View style={styles.info.description}>
+              <Text fontSize="subheading" fontWeight="bold">
+                {item.fullName}
+              </Text>
+              <Text color="textSecondary" fontSize="subheading">
+                {item.description}
+              </Text>
+              <Badge>{item.language}</Badge>
+            </View>
+          </View>
+          <View style={styles.stats}>
+            <View style={styles.stats.container}>
+              <Text
+                style={{ textAlign: "center" }}
+                fontSize="subheading"
+                fontWeight="bold"
+              >
+                {nFormatter(item.stargazersCount)}
+              </Text>
+              <Text style={{ textAlign: "center" }} color="secondary">
+                Stars
+              </Text>
+            </View>
+            <View style={styles.stats.container}>
+              <Text
+                style={{ textAlign: "center" }}
+                fontSize="subheading"
+                fontWeight="bold"
+              >
+                {nFormatter(item.forksCount)}
+              </Text>
+              <Text style={{ textAlign: "center" }} color="secondary">
+                Forks
+              </Text>
+            </View>
+            <View style={styles.stats.container}>
+              <Text
+                style={{ textAlign: "center" }}
+                fontSize="subheading"
+                fontWeight="bold"
+              >
+                {nFormatter(item.reviewCount)}
+              </Text>
+              <Text style={{ textAlign: "center" }} color="secondary">
+                Reviews
+              </Text>
+            </View>
+            <View style={styles.stats.container}>
+              <Text
+                style={{ textAlign: "center" }}
+                fontSize="subheading"
+                fontWeight="bold"
+              >
+                {item.ratingAverage}
+              </Text>
+              <Text style={{ textAlign: "center" }} color="secondary">
+                Rating
+              </Text>
+            </View>
+          </View>
         </View>
-      </View>
-      <View style={styles.stats}>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {nFormatter(item.stargazersCount)}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Stars
-          </Text>
-        </View>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {nFormatter(item.forksCount)}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Forks
-          </Text>
-        </View>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {nFormatter(item.reviewCount)}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Reviews
-          </Text>
-        </View>
-        <View style={styles.stats.container}>
-          <Text
-            style={{ textAlign: "center" }}
-            fontSize="subheading"
-            fontWeight="bold"
-          >
-            {item.ratingAverage}
-          </Text>
-          <Text style={{ textAlign: "center" }} color="secondary">
-            Rating
-          </Text>
-        </View>
-      </View>
-    </View>
+      </Link>
+    </Pressable>
   );
 };
 

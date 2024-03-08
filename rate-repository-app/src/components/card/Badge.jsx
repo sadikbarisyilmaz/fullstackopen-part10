@@ -4,7 +4,6 @@ import theme from "../../theme";
 
 const styles = StyleSheet.create({
   content: {
-    flex: 1,
     backgroundColor: theme.colors.primary,
     borderRadius: 3,
     paddingVertical: 4,
