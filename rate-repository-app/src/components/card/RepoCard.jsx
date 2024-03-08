@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 
 const RepoCard = ({ item }) => {
   return (
-    <View style={styles.container}>
+    <View testID="repositoryItem" style={styles.container}>
       <View style={styles.info}>
         <Image
           style={styles.info.image}
