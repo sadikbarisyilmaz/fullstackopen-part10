@@ -1,4 +1,4 @@
-import { FlatList, View, StyleSheet, Text } from "react-native";
+import { FlatList, View, StyleSheet } from "react-native";
 import RepoCard from "./card/RepoCard";
 
 const styles = StyleSheet.create({
@@ -16,9 +16,6 @@ const RepositoryListContainer = ({ repositories }) => {
 
   return (
     <>
-      {/* <Text style={{ alignSelf: "center", paddingVertical: 100 }}>
-        Loading...
-      </Text> */}
       <FlatList
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}

@@ -4,14 +4,17 @@ import Text from "./Text";
 import RepositoryListContainer from "./RepositoryListContainer";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
-
+import { SearchBar } from "@rneui/themed";
+import { useDebounce } from "use-debounce";
 const RepositoryList = () => {
   const [sort, setSort] = useState("CREATED_AT");
+  const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("CREATED_AT");
   const [orderDirection, setOrderDirection] = useState("DESC");
+  const [searchKeyword] = useDebounce(search, 500);
   const { data, error, loading, refetch } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
-    variables: { orderBy, orderDirection },
+    variables: { orderBy, orderDirection, searchKeyword },
   });
 
   const handleSort = () => {
@@ -41,9 +44,17 @@ const RepositoryList = () => {
       </Text>
     );
   }
+  const updateSearch = (search) => {
+    setSearch(search);
+  };
 
   return (
     <>
+      <SearchBar
+        placeholder="Search..."
+        onChangeText={updateSearch}
+        value={search}
+      />
       <Picker
         selectedValue={sort}
         onValueChange={(itemValue, itemIndex) => {
