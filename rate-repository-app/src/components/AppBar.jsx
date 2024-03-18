@@ -55,11 +55,18 @@ const AppBar = () => {
           </Link>
         </Pressable>
         {!data.me ? (
-          <Pressable>
-            <Link to="/signIn">
-              <AppBarTab>Sign In</AppBarTab>
-            </Link>
-          </Pressable>
+          <>
+            <Pressable>
+              <Link to="/signIn">
+                <AppBarTab>Sign In</AppBarTab>
+              </Link>
+            </Pressable>
+            <Pressable>
+              <Link to="/signUp">
+                <AppBarTab>Sign Up</AppBarTab>
+              </Link>
+            </Pressable>
+          </>
         ) : (
           <>
             <Pressable>
