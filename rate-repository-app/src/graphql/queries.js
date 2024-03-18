@@ -60,8 +60,27 @@ query($repositoryId: ID!) {
 export const ME = gql`
   query {
     me {
-     id
-     username
+      createdAt
+      id
+      reviewCount
+      username
+      reviews {
+        edges {
+          node {
+            repository {
+              name
+              ownerName
+              url
+            }
+            createdAt
+            id
+            rating
+            text
+            repositoryId
+            userId
+          }
+        }
+      }
     }
   }
 `;
@@ -71,5 +90,19 @@ mutation SignIn($credentials: AuthenticateInput) {
     authenticate(credentials: $credentials) {
       accessToken
     }
+}
+`;
+
+export const POST_REVIEW = gql`
+mutation ($review: CreateReviewInput) {
+  createReview(review: $review) {
+    repositoryId
+  }
+}
+`;
+
+export const DELETE_REVIEW = gql`
+mutation ($deleteReviewId: ID!) {
+  deleteReview(id: $deleteReviewId)
 }
 `;

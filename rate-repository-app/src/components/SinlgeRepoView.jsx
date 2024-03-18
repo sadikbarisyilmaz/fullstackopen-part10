@@ -1,10 +1,7 @@
-import { View, StyleSheet, Image, Pressable, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import Text from "./Text";
-import Badge from "./card/Badge";
 import theme from "../theme";
-import * as Linking from "expo-linking";
 import { GET_REPOSITORY } from "../graphql/queries";
-import { nFormatter } from "../helpers";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-native";
 import ReviewCard from "./card/ReviewCard";
@@ -57,7 +54,8 @@ const styles = StyleSheet.create({
 
 const SinlgeRepoView = () => {
   let { id } = useParams();
-  const { data, error, loading } = useQuery(GET_REPOSITORY, {
+  const { data, loading } = useQuery(GET_REPOSITORY, {
+    fetchPolicy: "cache-and-network",
     variables: { repositoryId: id },
   });
 
