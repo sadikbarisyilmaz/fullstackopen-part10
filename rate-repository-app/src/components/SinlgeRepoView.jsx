@@ -54,26 +54,50 @@ const styles = StyleSheet.create({
 
 const SinlgeRepoView = () => {
   let { id } = useParams();
-  const { data, loading } = useQuery(GET_REPOSITORY, {
-    fetchPolicy: "cache-and-network",
-    variables: { repositoryId: id },
-  });
+  const { data, loading, error, fetchMore, refetch, ...result } = useQuery(
+    GET_REPOSITORY,
+    {
+      fetchPolicy: "cache-and-network",
+      variables: { repositoryId: id, first: 2 },
+    }
+  );
 
   if (loading) {
     return <Text>loading...</Text>;
   }
+
+  const handleFetchMore = () => {
+    const canFetchMore =
+      !loading && data?.repository.reviews.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      console.log("cant");
+      return;
+    }
+
+    console.log("fetch more");
+    fetchMore({
+      variables: {
+        after: data.repository.reviews.pageInfo.endCursor,
+        first: 2,
+      },
+    });
+  };
+
   const ItemSeparator = () => <View style={styles.separator} />;
 
   const reviewNodes = data.repository.reviews
     ? data.repository.reviews.edges.map((edge) => edge.node)
     : [];
-
+  console.log(data);
   return (
     <>
       <FlatList
         data={reviewNodes}
         ItemSeparatorComponent={ItemSeparator}
         renderItem={({ item, index }) => <ReviewCard item={item} key={index} />}
+        onEndReachedThreshold={0.5}
+        onEndReached={handleFetchMore}
         ListHeaderComponent={() => (
           <RepositoryInfo repository={data.repository} />
         )}
