@@ -1,20 +1,21 @@
-import { useQuery } from "@apollo/client";
-import { GET_REPOSITORIES } from "../graphql/queries";
 import Text from "./Text";
 import RepositoryListContainer from "./RepositoryListContainer";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { SearchBar } from "@rneui/themed";
 import { useDebounce } from "use-debounce";
+import { useRepositories } from "../hooks/useRepositories";
+
 const RepositoryList = () => {
   const [sort, setSort] = useState("CREATED_AT");
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("CREATED_AT");
   const [orderDirection, setOrderDirection] = useState("DESC");
   const [searchKeyword] = useDebounce(search, 500);
-  const { data, error, loading, refetch } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: "cache-and-network",
-    variables: { orderBy, orderDirection, searchKeyword },
+
+  const { repositories, fetchMore, error, loading, refetch } = useRepositories({
+    first: 3,
+    // ...
   });
 
   const handleSort = () => {
@@ -47,7 +48,9 @@ const RepositoryList = () => {
   const updateSearch = (search) => {
     setSearch(search);
   };
-
+  const onEndReach = () => {
+    console.log("You have reached the end of the list");
+  };
   return (
     <>
       <SearchBar
@@ -65,7 +68,10 @@ const RepositoryList = () => {
         <Picker.Item label="Highest Rated Repositories" value="DESC" />
         <Picker.Item label="Lowest Rated Repositories" value="ASC" />
       </Picker>
-      <RepositoryListContainer repositories={data.repositories} />
+      <RepositoryListContainer
+        onEndReach={onEndReach}
+        repositories={repositories}
+      />
     </>
   );
 };
