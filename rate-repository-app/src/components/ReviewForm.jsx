@@ -43,7 +43,7 @@ const validationSchema = yup.object().shape({
     .number()
     .min(0, "Rating must be between 0 and 100")
     .max(100, "Rating must be between 0 and 100")
-    .required("Password is required"),
+    .required("Rating is required"),
   text: yup.string(),
 });
 
@@ -104,7 +104,7 @@ export const ReviewForm = ({ onSubmit }) => {
           },
         ]}
         placeholder="Rating between 0 and 100"
-        value={formik.values.rating}
+        value={formik.values.rating.toString()}
         keyboardType="numeric"
         onChangeText={formik.handleChange("rating")}
         testID="rating"
