@@ -15,7 +15,7 @@ const RepositoryList = () => {
 
   const { repositories, fetchMore, error, loading, refetch } = useRepositories({
     first: 3,
-    // ...
+    variables: { orderBy, orderDirection, searchKeyword },
   });
 
   const handleSort = () => {
@@ -46,12 +46,15 @@ const RepositoryList = () => {
     );
   }
   const updateSearch = (search) => {
+    console.log(search);
     setSearch(search);
   };
+
   const onEndReach = () => {
     console.log("You have reached the end of the list");
     fetchMore();
   };
+
   return (
     <>
       <SearchBar
